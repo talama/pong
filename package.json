@@ -1,0 +1,26 @@
+{
+  "name": "pong",
+  "version": "1.0.0",
+  "description": "Simple Pong game implemented using MVC pattern",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/talama/pong.git"
+  },
+  "author": "Talama",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/talama/pong/issues"
+  },
+  "homepage": "https://github.com/talama/pong#readme",
+  "devDependencies": {
+    "eslint": "^8.13.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-import": "^2.26.0",
+    "prettier": "2.6.2"
+  }
+}
