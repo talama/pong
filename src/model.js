@@ -70,9 +70,14 @@ class Model {
     this.collision();
   }
 
+  updateAI() {
+    this.AI.y = this.ball.y - this.playerLength / 2;
+  }
+
   update(updateRate) {
     setInterval(() => {
       this.updateBall();
+      this.updateAI();
       this.updateEvent.trigger(this.ball, this.AI);
     }, this.updateRate);
   }

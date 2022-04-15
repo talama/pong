@@ -8,7 +8,6 @@ const ballRadius = 10;
 const [playerWidth, playerLength] = [20, 75];
 const [gameWidth, gameHeight] = [cvs.clientWidth, cvs.clientHeight];
 const [ballColor, playerColor, aiColor] = ['red', 'orange', 'green'];
-
 const updateRate = 1000 / 100;
 
 const pongModel = new Model(
