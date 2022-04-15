@@ -1,3 +1,4 @@
+import Event from './event.js';
 class View {
   constructor(
     cvs,
@@ -25,11 +26,14 @@ class View {
     this.cvs.addEventListener('mousemove', (evt) =>
       this.playerMove(evt),
     );
+    this.score = [0, 0];
+    this.playerEvent = new Event();
   }
 
   playerMove(evt) {
     const rect = this.cvs.getBoundingClientRect();
     this.player.y = evt.y - rect.y - this.playerLength / 2;
+    this.playerEvent.trigger(this.player);
   }
 
   updatePositions(ball, ai) {
@@ -37,9 +41,32 @@ class View {
     this.AI = ai;
   }
 
+  updateScore(score) {
+    this.score = score;
+  }
+
   drawBoard() {
     this.ctx.fillStyle = 'blue';
     this.ctx.fillRect(0, 0, this.gameWidth, this.gameHeight);
+    // draw the net
+    this.ctx.fillStyle = 'white';
+    for (let i = 5; i <= this.gameHeight; i += 20) {
+      this.ctx.fillRect(this.gameWidth / 2 - 4, i, 4, 10);
+    }
+    // draw the score
+    this.ctx.font = '60px serif';
+    this.ctx.textAlign = 'left';
+    this.ctx.fillText(
+      this.score[0],
+      this.gameWidth / 6,
+      this.gameHeight / 6,
+    );
+    this.ctx.textAlign = 'right';
+    this.ctx.fillText(
+      this.score[1],
+      (5 * this.gameWidth) / 6,
+      this.gameHeight / 6,
+    );
   }
 
   drawBall(ball) {
