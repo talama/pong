@@ -47,13 +47,10 @@ class Model {
     this.ball.velocity.x = 1;
     this.ball.velocity.y = 1;
     this.ball.accelleration = 1;
-    // reset player 1
-    this.player.x = 20;
-    this.player.y = this.gameHeight / 2 - this.playerLength / 2;
     // reset AI
     this.AI.x = this.gameWidth - this.playerWidth - 20;
     this.AI.y = this.gameHeight / 2 - this.playerLength / 2;
-    this.updateEvent.trigger(this.ball, this.player, this.AI);
+    this.updateEvent.trigger(this.ball, this.AI);
   }
 
   collision() {
@@ -76,7 +73,7 @@ class Model {
   update(updateRate) {
     setInterval(() => {
       this.updateBall();
-      this.updateEvent.trigger(this.ball, this.player, this.AI);
+      this.updateEvent.trigger(this.ball, this.AI);
     }, this.updateRate);
   }
 }

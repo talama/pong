@@ -2,8 +2,8 @@ class Controller {
   constructor(model, view) {
     this.model = model;
     this.view = view;
-    this.model.updateEvent.addListner((ball, player, ai) => {
-      this.view.updatePositions(ball, player, ai);
+    this.model.updateEvent.addListner((ball, ai) => {
+      this.view.updatePositions(ball, ai);
     });
   }
 

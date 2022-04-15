@@ -1,6 +1,6 @@
 class View {
   constructor(
-    ctx,
+    cvs,
     gameWidth,
     gameHeight,
     playerWidth,
@@ -9,7 +9,8 @@ class View {
     playerColor,
     aiColor,
   ) {
-    this.ctx = ctx;
+    this.cvs = cvs;
+    this.ctx = this.cvs.getContext('2d');
     this.gameWidth = gameWidth;
     this.gameHeight = gameHeight;
     this.playerWidth = playerWidth;
@@ -17,11 +18,22 @@ class View {
     this.ballColor = ballColor;
     this.playerColor = playerColor;
     this.aiColor = aiColor;
+    this.player = {
+      x: 20,
+      y: this.gameHeight / 2 - this.playerLength / 2,
+    };
+    this.cvs.addEventListener('mousemove', (evt) =>
+      this.playerMove(evt),
+    );
   }
 
-  updatePositions(ball, player, ai) {
+  playerMove(evt) {
+    const rect = this.cvs.getBoundingClientRect();
+    this.player.y = evt.y - rect.y - this.playerLength / 2;
+  }
+
+  updatePositions(ball, ai) {
     this.ball = ball;
-    this.player = player;
     this.AI = ai;
   }
 

@@ -4,7 +4,6 @@ import View from './view.js';
 
 // Game parameters
 const cvs = document.getElementById('pong');
-const ctx = cvs.getContext('2d');
 const ballRadius = 10;
 const [playerWidth, playerLength] = [20, 75];
 const [gameWidth, gameHeight] = [cvs.clientWidth, cvs.clientHeight];
@@ -22,7 +21,7 @@ const pongModel = new Model(
 );
 
 const pongView = new View(
-  ctx,
+  cvs,
   gameWidth,
   gameHeight,
   playerWidth,
