@@ -56,9 +56,21 @@ class Model {
     this.updateEvent.trigger(this.ball, this.player, this.AI);
   }
 
+  collision() {
+    const ballTop = this.ball.y + this.ball.radius;
+    const ballBottom = this.ball.y - this.ball.radius;
+    const ballRight = this.ball.x + this.ball.radius;
+    const ballLeft = this.ball.x - this.ball.radius;
+    if (ballTop >= this.gameHeight || ballBottom <= 0)
+      this.ball.velocity.y = -this.ball.velocity.y;
+    if (ballRight >= this.gameWidth || ballLeft <= 0)
+      this.ball.velocity.x = -this.ball.velocity.x;
+  }
+
   updateBall() {
     this.ball.x += this.ball.velocity.x;
     this.ball.y += this.ball.velocity.y;
+    this.collision();
   }
 
   update(updateRate) {
