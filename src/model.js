@@ -1,6 +1,18 @@
 import Event from './event.js';
 
+/**
+ * Class Model
+ */
 class Model {
+  /**
+   * Implements the Model component of the MVC.
+   * @param {Number} gameWidth
+   * @param {Number} gameHeight
+   * @param {Number} playerWidth
+   * @param {Number} playerLength
+   * @param {Number} ballRadius
+   * @param {Number} updateRate
+   */
   constructor(
     gameWidth,
     gameHeight,
@@ -23,16 +35,17 @@ class Model {
         x: 4,
         y: 3,
       },
-      accelleration: 1,
+      acceleration: 1,
     };
 
+    // Calcualtes the length of the ball velocity vector
     this.ball.getVelocity = () => {
       return Math.sqrt(
         this.ball.velocity.x ** 2 + this.ball.velocity.y ** 2,
       );
     };
 
-    // player settings
+    // players settings
     this.player = {
       x: 20,
       y: this.gameHeight / 2 - this.playerLength / 2,
@@ -49,10 +62,19 @@ class Model {
     this.scoreEvent = new Event();
   }
 
+  /**
+   * Returns a random integer between min and max both inclusive.
+   * @param {Number} min
+   * @param {Number} max
+   * @returns
+   */
   getRandom(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
   }
 
+  /**
+   * Resets the ball to the center of the board with a random velocity and direction.
+   */
   reset() {
     // reset ball
     let direction = this.getRandom(-1, 1);
@@ -61,10 +83,14 @@ class Model {
     this.ball.y = this.gameHeight / 2;
     this.ball.velocity.x = this.getRandom(1, 2) * direction;
     this.ball.velocity.y = this.getRandom(1, 2);
-    this.ball.accelleration = 1;
+    this.ball.acceleration = 1;
     this.updateEvent.trigger(this.ball, this.AI);
   }
 
+  /**
+   * Returns true if the ball hits one of the horizontal walls.
+   * @returns {Boolean}
+   */
   wallCollision() {
     return (
       this.ball.y - this.ball.radius <= 0 ||
@@ -72,6 +98,11 @@ class Model {
     );
   }
 
+  /**
+   * Returns true if the ball collides with one of the players.
+   * @param {Object} player
+   * @returns {Boolean}
+   */
   paddleCollision(player) {
     const ballTop = this.ball.y - this.ball.radius;
     const ballBottom = this.ball.y + this.ball.radius;
@@ -85,6 +116,9 @@ class Model {
     );
   }
 
+  /**
+   * Updates ball velocity and position.
+   */
   updateBall() {
     // only check for collisions for the player the ball is going towards to
     // and remember if the velocity direction x is positive or negative
@@ -100,7 +134,7 @@ class Model {
     // if the ball hits one of the horizontal walls reflect ball velocity around x axe
     if (this.wallCollision()) {
       this.ball.velocity.y = -this.ball.velocity.y;
-      this.ball.accelleration += 0.1;
+      this.ball.acceleration += 0.1;
     }
     // if the ball hits one of the paddles reflect it with a velocity angle that is interpolated
     // linearly between 45 and -45 degrees based on the hit point distance from the paddle center
@@ -117,24 +151,37 @@ class Model {
       const velocity = this.ball.getVelocity();
       this.ball.velocity.x = velocity * Math.cos(angle) * direction;
       this.ball.velocity.y = velocity * Math.sin(angle);
-      this.ball.accelleration += 0.1;
+      this.ball.acceleration += 0.1;
     }
     // move the ball
-    this.ball.x += this.ball.velocity.x * this.ball.accelleration;
-    this.ball.y += this.ball.velocity.y * this.ball.accelleration;
+    this.ball.x += this.ball.velocity.x * this.ball.acceleration;
+    this.ball.y += this.ball.velocity.y * this.ball.acceleration;
   }
 
+  /**
+   * Update AI y position based on ball y position
+   */
   updateAI() {
     this.AI.y +=
       (this.ball.y - (this.AI.y + this.playerLength / 2)) * 0.1;
   }
 
+  /**
+   * Updated the postion of the player controlled paddle.
+   * @param {Object} player
+   */
   updatePlayer(player) {
     this.player = player;
   }
 
+  /**
+   * Update loop to be repeated 'updateRate' times per second.
+   * @param {Number} updateRate
+   */
   update(updateRate) {
     setInterval(() => {
+      // update the ball postion and check if any of teh players scored.
+      // if any player scored reset the ball position and trigger the scoreEvent.
       this.updateBall();
       if (this.ball.x - this.ball.radius <= 0) {
         this.score[1] += 1;
@@ -145,6 +192,7 @@ class Model {
         this.scoreEvent.trigger(this.score);
         this.reset();
       }
+      // Update the AI position and trigger the updateEvent.
       this.updateAI();
       this.updateEvent.trigger(this.ball, this.AI);
     }, this.updateRate);
