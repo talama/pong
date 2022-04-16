@@ -100,7 +100,7 @@ class Model {
     // if the ball hits one of the horizontal walls reflect ball velocity around x axe
     if (this.wallCollision()) {
       this.ball.velocity.y = -this.ball.velocity.y;
-      this.ball.accelleration += 0.2;
+      this.ball.accelleration += 0.1;
     }
     // if the ball hits one of the paddles reflect it with a velocity angle that is interpolated
     // linearly between 45 and -45 degrees based on the hit point distance from the paddle center
@@ -117,15 +117,16 @@ class Model {
       const velocity = this.ball.getVelocity();
       this.ball.velocity.x = velocity * Math.cos(angle) * direction;
       this.ball.velocity.y = velocity * Math.sin(angle);
-      this.ball.accelleration += 0.2;
+      this.ball.accelleration += 0.1;
     }
-    // move the ball with ball velocity
+    // move the ball
     this.ball.x += this.ball.velocity.x * this.ball.accelleration;
     this.ball.y += this.ball.velocity.y * this.ball.accelleration;
   }
 
   updateAI() {
-    this.AI.y = this.ball.y - this.playerLength / 2;
+    this.AI.y +=
+      (this.ball.y - (this.AI.y + this.playerLength / 2)) * 0.1;
   }
 
   updatePlayer(player) {
