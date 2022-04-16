@@ -133,8 +133,10 @@ class Model {
     }
     // if the ball hits one of the horizontal walls reflect ball velocity around x axe
     if (this.wallCollision()) {
+      const hitWall = new Audio('../sounds/wallHit.mp3');
       this.ball.velocity.y = -this.ball.velocity.y;
       this.ball.acceleration += 0.1;
+      hitWall.play();
     }
     // if the ball hits one of the paddles reflect it with a velocity angle that is interpolated
     // linearly between 45 and -45 degrees based on the hit point distance from the paddle center
@@ -149,9 +151,11 @@ class Model {
       // interpolated angle
       const angle = (Math.PI / 4) * distance;
       const velocity = this.ball.getVelocity();
+      const paddleHit = new Audio('../sounds/paddleHit.mp3');
       this.ball.velocity.x = velocity * Math.cos(angle) * direction;
       this.ball.velocity.y = velocity * Math.sin(angle);
       this.ball.acceleration += 0.1;
+      paddleHit.play();
     }
     // move the ball
     this.ball.x += this.ball.velocity.x * this.ball.acceleration;
@@ -183,13 +187,16 @@ class Model {
       // update the ball postion and check if any of teh players scored.
       // if any player scored reset the ball position and trigger the scoreEvent.
       this.updateBall();
+      const scoreHit = new Audio('../sounds/playerScore.mp3');
       if (this.ball.x - this.ball.radius <= 0) {
         this.score[1] += 1;
         this.scoreEvent.trigger(this.score);
+        scoreHit.play();
         this.reset();
       } else if (this.ball.x + this.ball.radius >= this.gameWidth) {
         this.score[0] += 1;
         this.scoreEvent.trigger(this.score);
+        scoreHit.play();
         this.reset();
       }
       // Update the AI position and trigger the updateEvent.
